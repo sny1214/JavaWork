@@ -1,0 +1,147 @@
+1. java.lang패키지
+   Java언어로 어떤 프로그램 작성해도 기본적으로 사용하는 
+   클래스(일반클래스, 추상클래스, 인터페이스, 열거형(enum),예외처리클래스)들을 모아놓은 패키지
+
+   import구문을 사용하지 않아도 된다.
+   
+   java.lang패키지의 대표적인 클래스들
+   1) Object클래스 -- 모든 클래스의 최상위 클래스이다.
+   2) Wrapper클래스 -- 기본자료형을 클래스로 나타내기 위한 용도의 클래스
+         기본형        Wrapper클래스
+         --------------------------
+         boolean     Boolean
+         char        Character
+         byte        Byte
+         short       Short
+         int         Integer
+         long        Long
+         float       Float
+         double      Double
+         -------------------------
+    3) 문자열 관련 클래스과 수학관련 클래스
+       String 
+       StringBuilder,StringBuffer
+       
+       StringTokenizer, StringJoiner <--- java.util패키지     
+   
+       Math
+       
+    4) 시스템과 쓰레드 관련 클래스
+       System, Thread class, Runnable interface
+       
+2.java.util 패키지 - 유용한 기능을 가진 클래스
+    0) 배열등 다른 클래스를 사용할때 편리하게 이용하도록 지원하는 클래스-유틸리티 클래스
+       Objects, Arrays, Collections, ....
+    1) 날짜와 시간관련 클래스 ==> 교재 10장
+    2) 자료구조 관련 클래스 - 컬렉션 프레임워크 ==> 교재 11장       
+       ArrayList, LinkedList, Stack, Vector, Queue interface
+       HashSet, TreeSet, HashMap, TreeMap, HashTable, Properties,...
+    3) 형식화 클래스   
+============================================================
+1) Object클래스
+   - Class Object is the root of the class hierarchy. 
+     Every class has Object as a superclass.
+   - 멤버변수는 없고 메서드만 있다.
+     생성자는 인자가 없는 생성자 1개이다.
+   - Object
+     --------------------------
+     public Object()                     생성자
+     public boolean	equals​(Object obj)	 객체가 같은지 여부
+     public final Class<?>	getClass()   실행시간의 객체 형정보 얻기 메섣,	
+     public int	hashCode()               해시코드	
+     public String	toString()	         현재 객체상태를 대표하는 문자열을 만들어주는 메서드
+     
+     protected Object	clone()          객체 복사본 만들기
+     protected void	finalize()	         객체가 소멸될때 작동하는 메서드	
+     --------------쓰레드(Thread)의 동기화 처리에서 사용되는 메서드-----------------------
+     public void	notify()	
+     public void	notifyAll()	
+     public void	wait()	
+     public void	wait​(long timeoutMillis)	
+     public void	wait​(long timeoutMillis, int nanos)	
+      
+      
+  중요)Object클래스의 원래의 메서드기능을 그대로 사용하라는 의미가 아니고
+      하위클래스에서 메서드를 재정의 해서 사용하라는 의도로 만들어 진것이다. 
+      
+  1) equals()
+     원래의 기능은 참조값(위치정보)이 같으면 true, 다르면 false을 리턴한다.  
+     우리는 내용값이 같으면 즉, 객체의 멤버변수의 상태값이 같으면 true, 다르면 false를 리턴하도록 재정의 하여 사용한다.
+     그런데 멤버변수가 1개 아니고 여러개인경우가 많으므로 클래스를 만든 목표에 가장 부합되는 형태로
+     재정의 해야한다 <=== 사용자가 결정
+     1) 제품과 단가가 같아야 같다.(선택)
+     2) 제품명만 같아도 같다.
+     3) 단가만 같아도 같다.
+     
+  2) hashCode()
+     컴퓨터 프로그램에서 해시코드는 특정로직을 작동시켜 얻어지는 결과값이
+     입력이 같으면 항상 같은 결과값을 만들어내는 로직을 해시알고리즘이라고 하고 그때 만들어진 결과값을 해시코드라고 한다.
+     
+     Object클래스의 hashCode()메서드는 객체는 존재하는것 자체로 다른값들과 식별되는 특성을 가지고 있다.
+     그래서 아무리 같은 값을 가졌다 할지라도 해시코드값을 개별 객체를 식별하는 식별자정수값으로 사용한다.
+     
+     그래서 Object클래스의 hashCode() 모든 객체의 hashCode값은 다르도록 만들어져 있다.
+     이후에 학습하는 컬렉션클래스에서 해시알고리즘을 사용하여 대량의 데이타를 저장해 놓고 빠르게 검색하는
+     클래스들을 이용하게 된다. 이때는 내용값이 같으면 같은 해시코드값이 만들어지도록 해야 한다.
+    
+     우리가 자주 사용하는 String 클래스는 Object의 hashCode()메서드를 재정의 하여
+     문자열의 값이 같으면 같은 hashCode값이 리턴되도록 만들어져 있다.
+     
+     hashCode()메서드는 컬렉션 프레임워크에서 사용하는 HashMap,HashSet,HashTable 클래스처럼
+     내부적으로 해시알고리즘을 사용하여 대량의 데이타를 저장/추가/수정/삭제/검색/정렬,.... 하는 기능을 제공하는 클래스를 이용할때
+     유용하게 사용된다.   
+  
+  3) toString()
+     
+     Object클래스의 toString() 메서드의 기능은 다음과 같다.
+      
+         패키지명.클래스명@hashCode()의결과값을16진문자열  형태로 출력해준다.
+     ==> getClass().getName() + '@' + Integer.toHexString(hashCode())    
+         ---------                                        -해시코드값---- 
+         클래스정보 -패키지명과클래스명---     ----16진수문자열로변환---------------
+         
+     우리는 현재객체의 상태를 대표하는 문자열을 만들어서 이용할때 toString()사용하므로
+     목적에 맞게 재정의 해서 사용한다.
+     
+   5) clone() 
+      객체의 복제본을 만드는 방법을 제공한다.
+      Object클래스의 clone()메서드는 얕은 복사를 이용하여 객체의 복사본을 빠르게 생성한다.(메모리전체를 통채로 복사)
+      
+      protected Object clone() throws CloneNotSupportedException
+      
+      주의)하위클래스에서 clone()메서드를 재정의(override)할때는 반드시 Cloneable interface를
+      implements해야만 한다.
+      
+      참고) 얕은복사 : 멤버변수를 무조건 복사
+            int arr[] = {3,5,6};
+            int arr2[] = arr;   //얕은 복사
+            //arr  0x100---->[3,5,6]
+            //arr2 0x100----^
+             
+           깊은복사 : 멤버변수가 참조변수이면 별도의 객체를 생성하고 멤버변수의 내용을 복사 
+            int arr[] = {3,5,6};
+            int arr2[] = new int[3];
+            for(int i=0; i<arr.length; i++){
+            	arr2[i] = arr[i];
+            }
+            //arr  0x100---->[3,5,6]
+            //arr2 0x200---->[3,5,6]           
+          
+   6) getClass() 
+   	  public final Class<?> getClass()
+   	  
+   	  final메서드 이므로 하위클래스에서 재정의 할수 없다. 단지 호출해서만 사용해야 한다.
+   	  
+	  getClass()메서드는 Class형 객체를 리턴한다. 여기에서 현재객체를 생성한 클래스정보(class information)가 저장되어 있다.
+	  클래스정보라 클래스명,패키지명, 접근제어자, 멤버변수의 종류 및 메서드의 종류 및 개별메서드의 형식등 클래스에 대한 모든 정보가
+	  객체가 저장되어있다.  이를 이용하여 프로그램 실행중에 다양한 기능에 활용된다. ==> 리플렉션이라고 부른다.
+	  
+	  참고) 지금까지 우리가 알고 있는 객체를 생성하는 방법
+	  1) new 와 함께 생성자 사용 
+	  2) 객체생성 전용메서드(클래스 메서드)
+	  3) 클래스정보를 이용하여 객체 생성
+	  
+	     	  
+
+   6) finalize()  
+             

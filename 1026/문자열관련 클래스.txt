@@ -1,0 +1,112 @@
+String관련 클래스들
+
+참고)jdk에서 제공하는 클래스라이브러리 소스를 확인하고 싶다면 아래화일의 압축을 해제하여 그 내용을 확인한다.
+    jdk설치폴더\lib\src.zip
+    
+Java언어에서 String(문자열)은 변경 불가능한(immutable) 문자열 객체로 표현된다.
+메모리에 문자열이 한번 할당(char[])된 이후에는 그내용을 변경할수 없다는 의미다.
+ 
+String str1 = new String("ABC");
+String str2 = new String("JICA");
+str1 = str1 + str2;
+//                   |-->|A|B|C|   ----|
+//str1 0x100------>[0x10,...]          | 변경불가능하다.
+//                   |-->|J|I|C|A| ----|                
+//str2 0x200------>[0x20,...]
+//                   |-->|A|B|C|J|I|C|A|
+//str2 0x300------>[0x30,...]
+
+
+변경가능한 문자열(mutable string)을 표현하기 위해 StringBuilder,StringBuffer클래스 사용한다.
+StringBuffer와 StringBuilder는 구조가 거의 동일하고 유일한 차이점은 
+멀티스레딩환경에서도 안전한 처리를 할수 있는 클래스가 StringBuffer이다.
+StringBuilder는 싱글쓰레드 프로그램에서 이용된다.
+
+StrigBuilder sb = new StringBuilder("ABC");
+//                   
+//                   |-->|A|B|Z|J|I|J|e|o|n|j|u|C|A| | | | | | | | | | | | ...|
+//sb 0x100------>[0x20,...]  ============|===================      
+//                                       |-->적정비율을 차지하면 스스로 다른메모리를 할당하여
+//                                           내용을 복사하고 크기를 늘리거나 줄이는 로직을 내부적으로 수행한다. 
+sb.append("JICA");
+sb.insert(5,"Jeonju");
+sb.setCharAt(2,'Z')
+
+-------------------------------------------------------------
+String클래스의 사용법
+
+1. 문자열 비교
+   Literal문자열과 new에 의해 생성되거나 키보드로 입력한 문자열의 메모리 구분
+   
+   String str1 = "abc";
+   String str2 = "abc";
+   String str3 = "abc";
+   
+   String str4 = new String("abc");
+   String str5 = new String("abc");
+   
+   String str6 = Scanner를 이용한 키보드입력-"abc"
+   
+	   |데이타영역(정적영역-static영역)
+	   |      "abc"
+	   |       ^
+	   |       | 
+	   |       |<------------------|         "abc"      "abc"       "abc"  Heap영역
+	   |       |                   |          ^          ^           ^
+	   |       |<---------|        |          |          |           |
+	   |       |          |        |          |          |           |
+ main()| str1 0x10 str2 0x10 str3 0x10  str4 0x100 str5 0x200  str6 0x300  stack영역
+
+   str1 == "abc"; str1.equals("abc"); //true 
+   str1 == str2;  str1.equals(str2);  //true
+   str1 == str3;  str1.equals(str3);  //true
+   
+   str1 == str4; //false   str1.equals(str4); //true 
+   str4 == str5; //false   str4.equals(str5); //true
+   str4 == str6; //false   str4.equals(str5); //true
+ 
+ 2. 문자열을 이용할때 자주 나타나는 코딩 표현에서 주의할점
+   String str = null;   //str이 유효한 문자열을 가리키고 있지 않다.
+                        //그러므로 str.멤버 표현을 사용하면 NullPointerException 이 발생한다.
+   str.length();  //NullPointerException                     
+                            
+   String str2 = "";    //빈 문자열
+                        //유효한 문자열을 가리키고 있으나 문자열값이 없다. 비어있다는 의미이다.
+   str2.length(); // 0
+   str2.isEmpty();// true                        
+   
+  3.문자열클래스의 다양한 생성자와 메서드의 사용법을 알아보자
+   
+   String()
+   String​(String original)
+   String​(char[] value)
+   String​(StringBuffer buffer)	
+   String​(StringBuilder builder)
+   String​(byte[] bytes)---| byte[]을 인자로 사용하는 생성자는 이후에
+   ....                   | 화일 입출력인 Network작업에서 주로 이용된다.
+   
+   char	charAt​(int index)
+   char[]	toCharArray()  문자열을 char[]배열로 리턴해준다.
+   String	substring​(int beginIndex)	
+   String	substring​(int beginIndex, int endIndex)
+   int	length()
+   boolean	isEmpty()
+   int compareTo​(String anotherString)  문자열 비교 - 양수,0,음수
+   String	concat​(String str)          문자열 합치기
+   boolean	equals​(Object anObject)
+   boolean	contains​(CharSequence s)    특정문자가 포함되어 있는지 여부
+                     --------------CharSequence는 interface이다.
+                     이를 구현한 클래스에 String,StringBuffer,...
+   static String	format​(String format, Object... args)  형식에 맞는 문자열 만들기
+   byte[]	getBytes()        문자열을 byte[]배열로 만들어주는 기능 - 많이 사용됨(file i/o, Network)                     
+   int	indexOf​(int ch)	
+   int	indexOf​(int ch, int fromIndex)	
+   int	indexOf​(String str)	
+   int	indexOf​(String str, int fromIndex)
+   int  lastIndexOf​(int ch)
+        ...    
+   String	replace​(char oldChar, char newChar)
+   String[]	split​(String regex)        문자열을 구분문자를 기준으로 분리하여 String[]만들기
+   static String	join​(CharSequence delimiter, CharSequence... elements)
+   static String	valueOf​(int i)        //기본자료형을 문자열로 만드는 기능
+          ...               -----기본자료형                   

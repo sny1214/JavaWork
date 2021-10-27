@@ -1,0 +1,9 @@
+과제1)
+
+String str = new String("JICA 전주정보문화산업진흥원 JICA JEONJU");	
+
+str에 저장된 문자열엣 'J' 문자의 위치를 모두 구하여 출력하시오.
+
+과제2) 
+ 교재 483page~ 1권끝까지 살펴보기
+ 

@@ -1,0 +1,46 @@
+1개의 메서드를 호출할때
+인자의 갯수를 다르게 전달할 수 있는 기법을 가변인자 사용이라고 한다.
+
+class Test{
+   ...
+   
+   int add(int a, int b){
+      return a + b;
+   }
+  
+   int add(int a, int b, int c){
+      return a + b + c;
+   }    
+   
+   int add(int a, int b, int c, int d){
+      return a + b + c + d;
+   }     
+}
+
+Test obj = new Test();
+obj.add(10,20);
+obj.add(10,20,30);
+obj.add(10,20,30,40);
+//위의 방법은 너무 번거롭다. 이를 개선한 방법이 가변인자를 가진 메서드를 이용하는 것이다.
+
+class Test{
+   ...
+   
+   int add(int...a){
+           -------> 가변인자 a로 전달되는 인자의 갯수는 0개부터~여러개 전달할수 있다는 의미이다.
+                    내부적으로 가변인자는 배열이다.
+       int result = 0;
+       for(int i = 0; i<a.length; i++){
+       	   result += a[i];
+       }             
+       return result;       
+   } 
+}
+
+Test obj = new Test();
+obj.add(10);          // ok   new int[]{10} ==> 내부에서는 int 배열을 만들어서 전달한다. 
+obj.add(10,20);       // ok   new int[]{10,20}
+obj.add(10,20,30);    // ok   new int[]{10,20,30}
+obj.add(10,20,30,40); // ok   new int[]{10,20,30,40}
+
+obj.add(new int[]{70,45,80,95,88});

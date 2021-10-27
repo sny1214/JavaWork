@@ -1,0 +1,15 @@
+1. 교재 249 page ~ 255 page까지 메서드 작성법에 대한 설명을 학습해 보기
+
+2. 야구게임 문제를 클래스와 객체를 이용하여 해결해 보세요.
+   class Baseball{
+   		멤버변수
+   		생성자
+   		메서드
+   		toString()
+   }
+   
+   class BaseballTest{
+   		public static void main(String [] args) {
+   			Baseball baseball = new Baseball();
+   		}
+   	}

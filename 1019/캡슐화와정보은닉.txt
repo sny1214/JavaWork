@@ -1,0 +1,62 @@
+1. 캡슐화 : 특정기능을 수행하는데 필요한
+          데이타와 메서드들을 모아놓은것 ==> 클래스
+          
+2. 클래스는 내부와 외부로 분리된다. 
+   이때 외부에서는 데이타를 직접 접근하지 못하도록
+   private접근제어를 이용해 데이타를 보호한다.
+   
+   또한 고유목적을 수행하기 위한 서비스 메서드를 public접근제어를 적용하여
+   외부에서도 사용하게 한다.
+   
+   이때 필요에 따라 멤버변수를 외부에서 직접 접근해야 할 필요성이 생기기도 한다.
+   (사용이 편리하다)
+   이를 충족시키기 위해 멤버변수값을 전문적으로 읽고 쓰는 메서드를 별도로 작성한다.
+   ==>setter, getter
+   
+   setter(set Method) : 멤버변수의 값을 변경시키는 메서드
+   getter(get Method) : 멤버변수의 값을 읽어가는 메서드
+   
+3. setter, getter의 코딩 규칙
+   class A{
+     private String name;
+     private int score;
+     ....
+     다양한 생성자들과
+     다양한 서비스 메서드들이 있다.
+     ....
+     //name멤버변수를 위한 set Method
+     public void setName(String name){
+        //[매개변수의 유효성 검사코드] 
+     	this.name = name;
+     }
+     
+     //name멤버변수를 위한 get Method
+     public String getName(){
+        //[멤버변수의 가공 코드]
+     	return this.name;
+     }
+     
+     //score멤버변수를 위한 set Method
+     public void setScore(int score){
+        this.score = score;
+     }
+     
+     //score멤버변수를 위한 get Mothod
+     public int getScore(){
+        return this.score;
+     }
+   } 
+   
+   
+   A obj = new A();
+   obj.name = "홍길동"   //error
+   obj.score = 80;     //error
+   System.out.printf("%s %d%n", obj.name, obj.score); //error
+   
+   obj.setName("홍길동"); //ok
+   obj.setScore(80);    //ok
+   System.out.printf("%s %d%n", obj.getName(), obj.getScore(); //ok
+ 
+4. 모든 private멤버변수에 set/get메서드를 작성하는 것은 아니다.
+   고유목적으로 외부에서 변경시키면 문제가 되는 멤버변수는 set Method를 작성하지 않는다.
+                 

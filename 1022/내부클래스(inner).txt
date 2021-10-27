@@ -1,0 +1,87 @@
+내부클래스는 클래스안에 선언된 클래스를 말한다.
+
+일반적인 프로그램에서 A class와 B class가 있다면 보통 다음과 같이 코딩한다.
+
+class A{
+  ....
+}
+
+             상속관계                      포함관계
+class B{     class B extends A{         class B {
+  ....         ...                        A a = new A();  
+}            }                          }
+------------------------------------------------------------
+class B{ //외부(Outer) 클래스      
+ |->  .....
+ |  class A{  //내부(inner) 클래스 ==> 우리가 학습하는 클래스 
+ |     ...
+ |     void method(){
+ |--------....
+       }
+    }   
+}
+
+왜 내부클래스를 사용할까?
+1) class A는 B class 이외에서 사용하지 않는다면
+   궂이 별도의 클래스로 작성할 필요가 없다
+2) class A와 class B가 긴밀한 관계를 가지고 있다면
+   별도의 클래스로 작성하면 코드가 복잡해진다.
+   내부클래스로 작성하면 내부클래스에서는 외부클래스의 멤버를 직접 접근할 수 있다는 장점이 있다.   
+============================================================
+내부 클래스의 종류
+ 
+ 일반클래스의 멤버종류와 유사하다.
+ class A{
+   int a;        //인스턴스 변수
+   static int b; //클래스 변수
+   ....
+   void method(){
+      int i=0;   //지역변수
+      ...
+   }
+ }
+ 
+ class Outer{
+    class A{     //1)인스턴스 내부클래스    --- Outer클래스로 객체가 생성된 이후에 
+       ....                               인스턴스 내부클래스의 객체를 생성하여 이용할 수 있다.
+    }
+    
+    static class B{//2)static 내부클래스 --- Outer클래스의 생성과 관계없이 static 내부클래스의 객체를
+       ....                               생성하여 이용할 수 있다. 
+    }   
+    
+    void method(){
+        class C{   //3)지역 내부클래스    ---- 선언된 메서드내부에서만 지역내부클래스 객체를  
+          ...                             생성하여 사용할 수 있다.  
+        }
+        ....  
+    }
+ }
+ 
+ 4) 익명의 클래스 - 이름없는 클래스(Anonymous class)
+                추상클래스나 인퍼페이스를 상속하거나 구현한 별도의 클래스를 만들지 않고
+                단 하나의 객체를 생성하여 사용하는 기법
+                
+ button객체.addActionListener(ActionLister인터페이스를 구현한 객체);
+ 방법1) class MyActionListener implements ActionListener{
+           @Override
+           public void actionPerformed​(ActionEvent e){
+               ...
+           }              
+       }  
+       
+       MyActionListener mal = new MyActionListener();  
+       button객체.addActionListener(mal);    
+ 
+ 방법2) 위의 코딩을 단순화 시키기 위해
+       ActionLister를 구현한 이름이없는 클래스를 정의하면서 객체도 생성한다.
+       //                           2) 이름없는 클래스로 객체 생성
+       button객체.addActionListener( new ActionListener(){ --| 1)이름없는 클래스의 구조를 정의
+             @Override                                      | 
+             public void actionPerformed​(ActionEvent e){    |
+               ...                                          |
+             }                                              |
+          } ------------------------------------------------|
+       ); 
+ 
+ 참고) 내부클래스도 클래스의 멤버이므로 접근제어자(private, default, protected, public 를 가질수 있다.

@@ -1,0 +1,79 @@
+1. 자료형의 종류
+   1) 기본형(원시자료형) : byte,short,int,long,float,double,boolean,char
+      
+   2) 참조형 : 배열명이나 객체명 
+   
+2. 기본형 변수는 변수에 값자체가 저장된다.
+   int score = 85;
+   double average = 95.23;
+   
+        score|  85  |   average|   95.23  | 
+   기억장소 크기 4byte               8byte
+   
+3. 참조형 변수는 값의 위치정보(주소)를 저장한다.
+   그러므로 무조건 4byte크기를 갖는다.
+   int arr[] = { 70, 50, 40, 88, 95 };
+   Tv tv = new Tv("검정색",true, 7);
+   
+                int  int         int
+               4byte 4byte .... 4byte
+            |-->[70, 50, 40, 88, 95]
+            |                      |---------------->검정색   
+            |               |-->[x050,true, 7 ]
+            |               |  
+            |               |   
+      arr|0x100 |      tv|0x200|    
+          4byte           4byte
+          
+4. 메서드 호출시 인자전달로 기본형매개변수를 전달할때와 
+                      참조형매개변수를 전달할때의 차이점
+                      
+   (1) 기본형을 전달하면 호출된 메서드 내부에서 값자체를 복사받아 사용하므로
+       내용값을 변경해도 메서드가 끝나도 돌아왔을때 원본은 변경되지 않는다.
+   (2) 참조형을 전달하면 호출된 메서드 내부에서 참조값을 복사받아 사용하므로
+       내용값을 변경하면 메서드가 끝나서 돌아왔을때 원본의 내용도 변경되어 있다.   
+          
+       int a = 10;
+       callPrimitive(a);
+       
+       int arr[] = { 10, 20 ,30 };
+       callReference(arr);
+       
+       Tv tv = new Tv("검정색",true,7);
+       callReference2(tv);
+       
+       void callReference2(A obj){
+          obj.color = "빨강색";
+          obj.power();
+          obj.channelUp();
+       }
+       
+       void callReference(int data[]){
+       	 data[0] = data[0] + 5;
+       }
+       
+       void callPrimitive(int x ){
+           x = x + 5;
+       }  
+                 |
+                 |             |-->[15,20,30]                               
+                 |             |   ^----|
+                 |             |        | 
+ callPrimitive() | x 15        |  data 0x100  callReference()             
+   main()        | a 10  arr 0x100
+                 |-----------------------------------------
+                 
+                              |---> "빨강색"
+                 |            |     "검정색"
+                 |     |-->[x060,false, 8 ]                     
+                 |     |   ^--| 
+                 |     |      |
+ callReference2()|     |  obj 0x300 
+   main()        | tv 0x300
+                 |-------------
+                 
+5) 리턴값 사용시 주의할점  
+
+  기본형의 리턴과
+  참조값의 리턴을 철저히 구분해서 사용해야 한다.
+                 

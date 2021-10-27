@@ -1,0 +1,7 @@
+교재와 관련된 강의자료나 ppt등을 참고하세요.
+또한 동영상도 참고로 살펴보세요.
+
+https://github.com/castello/javajungsuk_basic
+
+수업중에 사용한 source를 다운로드 받자.
+C:\JKWork\JavaWork\javajungsuk3-master.zip

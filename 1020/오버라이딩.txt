@@ -1,0 +1,32 @@
+오버라이딩(overriding) 
+  - 조상 클래스로부터 상속받은 메서드의 내용을 변경하는 것을 오버라이딩이라고 한다.
+  - 상위클래스의 메서드를 하위클래서도 재정의하는 것이다.
+  - 프로그램에서 override는 다른것보다 우선하는, 즉, 최우선으로의 의미가 적용된다.
+  
+비교) 오버로딩(overloading) : 메서드는 같고 인자정보가 다른메서드를 만드는것(리턴값은 상관없음)
+
+  오버라이딩의 규칙
+  1) 상위클래스와 메서드명, 인자정보, 리턴값 정보가 동일해야 한다.  
+  2) 접근제어자의 범위는 같거나 넓어야 한다.
+     접근제어자의 범위
+       같은 패키지          다른 패키지
+     ----------------  --------------------
+     private < default < protected < public
+     내부숨김     공개       상속받은 클래스  외부공개
+                         내부에서만 접근가능 
+                          
+       같은 패키지에서는 default와 protected는 동일한 역활을 수행한다.
+       다른 패키지에서는 default,protected 모두 객체.멤버의 접근은 불가능하다.
+                    상속받은 하위클래스의 내부에서는 default은 접근 불가능하고, protected는 접근 가능하다.
+                    
+  3) 예외처리에 참여하는 예외의 종류가 늘어나면 안된다.(갯수뿐만이 아니라, 범위까지)                       
+      Exception
+        IOException
+        SQLException
+        ....
+        RuntimeException
+           ArithmeticException   ==> 0으로 나누었을때 발생
+           NullPointerException  ==> 참조변수 즉, 객체에 null저장되어 있을때 멤버에 접근할 때 발생
+           IndexOutOfBoundsException
+               ArrayIndexOutOfBoundsException ==> 배열 첨자범위를 넘어섰을때
+           ....    

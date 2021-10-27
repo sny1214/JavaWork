@@ -1,0 +1,42 @@
+Java언어에서의 문자열(String)
+1. 문자열은 기본자료형이 아니라 클래스이다.
+   그러므로 문자열 자체를 객체로 취급된다.
+   
+2. 문자열의 길이를 확인할때 
+   문자열.length() 를 사용한다.
+   -------------메서드
+   
+   String title = "JICA전주";;
+   System.out.println(title.length()); //6
+   System.out.println("ABC".length()); //3
+   
+   주의) 배열일때는 배열요소의 크기를 알아낼때는
+   배열명.length를 사용한다.
+   ------------ 멤버변수(Java언어에서는 필드-field 라고 부른다)
+   
+   int  arr[] = {7,2,4,3,8};
+   System.out.println(arr.length); //5
+   
+   char cArr[] = {'J','I','C','A','전','주'};
+   System.out.println(cArr.length); //6 
+
+3. 문자열의 특정 위치값만 추출하기
+   //              01234 5 
+   String title = "JICA전주";
+   
+   //char	charAt​(int index)
+   System.out.println(title.charAt(2));     // 'C'    char
+   
+   //String	substring​(int beginIndex, int endIndex)      
+   System.out.println(title.substring(2,3));// "C"    String
+   System.out.println(title.substring(2,5));// "CA전" String
+   
+4. System클래스는 범용적인 유용한 메서드를 지원한다.
+   System.in ==> Scanner  : 입력기능
+   System.out             : 출력기능
+   
+   System.arraycopy()     : 배열요소 복사
+   System.exit(0)         : 프로그램 강제 종료
+   
+   System.gc()            : 더이상 사용하지 않는 동적영역을 정리(garbage collector)   
+   System.currentTimems() : 현재 시간 정보(1970.1.1 0:0:0 초를 기준으로한 현재의 milli scond)     

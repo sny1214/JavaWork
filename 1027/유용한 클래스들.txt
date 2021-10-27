@@ -1,0 +1,102 @@
+java.lang, java.util 패키지에는 여러 분야에 사용하는 유용한 클래스들이 많다.
+
+1. Object
+2. String, StringBuilder/StringBuffer, StringJoiner, StringTokenizer 
+3. Math클래스 --- 수학관련기능 제공
+	 PI,E등의 상수와 다양한 수학 계산에 필요한 메서드를 static메서드로 제공하고 있다.
+4. Wrapper클래스 -- 기본자료형을 클래스로 나타내기 위한 용도의 클래스
+         기본형        Wrapper클래스
+         --------------------------
+         boolean     Boolean
+         char        Character    V
+         byte        Byte
+         short       Short
+         int         Integer      V
+         long        Long
+         float       Float
+         double      Double
+         -------------------------
+         String.valueOf(기본자료형) : 기본자료형 ----> String객체
+         
+         상속계층구조
+         -----------------
+         Object
+            Boolean
+            Character
+            Number
+              Byte
+              Short
+              Integer
+              Long
+              Float
+              Double
+              BigInteger
+              BigDecimal
+              
+   1) 모든 Wrapper는 자신의 기본자료형과 문자열인 인자로 사용하는 생성자를 가지고 있다(Deprecated)
+      또한 기본자료형의 특성을 대표하는 상수값들을 필드로 가지고 있다(멤버변수)
+      
+      Double(double value)
+      Double(String value)
+   
+   2) 생성자의 기능을 대신하는 static메서드를 제공해준다.(concreate method)
+            기본자료형 -----> Wrapper클래스
+              
+      static Double	valueOf​(double d)	
+      static Double	valueOf​(String s)  
+         
+   3) 문자열을 숫자로 변환
+   	  Wrapper클래스.parseXXX(String)	* XXX:기본자료형
+   	  
+   	  Double.parseDouble(String);	 => "100.0"  ---> 100.0
+   	  Integer.parseInt("100");  	 => "100" 	 ---> 100
+   	  Byte.parseByte("100");         =>	"100"    ---> 100
+   	 
+   4) Wrapper클래스를 기본자료형으로 만들어주는 메서드
+
+   	  Integer i = new Integer(10); -----------| 동일
+   	  Integer i = Integer.valueOf(10); -(권장)-|
+   	  
+   	  i.intValue();
+   	  
+   	  Wrapper클래스객체.XXXValue();  Wrapper클래스 --> 기본자료형
+   	  
+   5) Wrapper클래스가 자동으로 기본자료형으로 변경되는 기능(unboxing)
+   	  기본자료형이 자동으로 Wrapper클래스형으로 변경되는 기능(autoboxing)
+   	  
+   	  int i = 5;						//기본자료형
+   	  Integer iObj = new Integer(7)		//Wrapper클래스형
+   	  
+   	  int sum = i + iObj;				//자료형이 다른 것끼리 더하는 게 오류인가? no
+   	  				====iObj.intValue() //iObj가 내부적으로 iObj.intValue() 코드 실행되어 int로 바껴
+   	  									//정상적으로 작동한다
+   	  									
+   	  									//자동으로 기본자료형으로 변경되는 unboxing 기능 작동
+   	  					
+   	  참고) 컬렉션 객체들은 내부구성요소로 모두 객체만을 가진다.
+   	  ArrayList 형태인 list에 integer값을 저장하겠다.	객체만 가질 수 있는 데 integer값 --> 잘못됐다.								
+   	  ArrayList<Integer> list = new ArrayList<Integer>();  									
+   
+   	  list.add(new Integer(7));	//ok
+   	  list.add(15);				//error? no,
+   	       ===Integer.valueOf(15)
+   	  	
+   	  	//문장자체가 실행되는 게 아니라, Integer.ValueOf(15)가 내부적으로 작동시킴 -> integer 객체 만들어서 추가
+   	  	//기본자료형만 쓰면 기본자료형이 자동으로 Wrapper클래스형으로 변경되는 autoboxing 기능
+   	  	
+5. 기타 유용한 클래스들 (-s로 끝나는 클래스들)
+  1) Arrays : 다양한 형태의 배열을 다르면서 공통적으로 필요한 기능을 제공하는 클래스
+    
+     int arr[] = { 10, 92, 48, 26, 5 };
+     System.out.println(Arrays.toString(arr)); //"[10, 92, 48, 26, 5]"
+ 	 Arrays.sort(arr);  // 오름차순
+ 	 
+ 	 //내림차순으로 하고 싶다면 ... 
+  
+  2) Objects : 모든 객체를 사용할 때 유용할 것 같은 기능을 제공하는 클래스
+  3) Collections : 컬렉션 객체 사용시 유용한 기능을 제공하는 클래스
+  ---------------------------------------------------------------
+  4)
+  
+  , Collections 
+  

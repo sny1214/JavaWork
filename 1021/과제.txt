@@ -1,0 +1,4 @@
+1. com.jica.polyarg2패키지의 예제에서
+ 제품을 반품했을때의 처리고 추가해 보시오.
+ 
+2. 375page~390page까지 살펴보기(abstract class, interface) 
