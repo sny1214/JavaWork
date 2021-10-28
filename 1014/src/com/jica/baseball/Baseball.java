@@ -7,7 +7,7 @@ class Baseball {
 	int num2;
 	int num3;
 	int num4;
-
+	int result;
 	
 //1~10까지 난수 만들기
 	int shuffle() {
@@ -20,10 +20,7 @@ class Baseball {
 			arr[i] = tennum[random.nextInt(10)];
 			System.out.println(i+"번째 랜던값 : " + arr[i]);
 		}
-
-	
-		return.result
-	
+		return result;
 	}
-
 }
+

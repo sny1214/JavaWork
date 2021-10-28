@@ -49,7 +49,7 @@ public class BaseballTest {
 		
 
 	//배열 출력
-	 void printArray(int arr[]){
+	 static void printArray(int arr[]){
 		  String result = "[";
 		  for(int i=0; i<arr.length; i++){
 		     	if( i != arr.length-1){

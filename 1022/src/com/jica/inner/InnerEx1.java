@@ -4,7 +4,7 @@ class InnerEx1 {  //외부 클래스
 	  //인스턴스 내부 클래스  -- InnerEx1객체가 생성된후 연결시켜서 인스턴스내부클래스의 객체를 생성할 수 있다.
       class InstanceInner { 
             int iv = 100; 
-            static int cv = 100;            // (Java버전에 따라 다르다)에러! static변수를 선언할 수 없다. 
+           // static int cv = 100;            // (Java버전에 따라 다르다)에러! static변수를 선언할 수 없다. 
             final static int CONST = 100;   // final static은 상수이므로 허용. 
       } 
 
@@ -17,7 +17,7 @@ class InnerEx1 {  //외부 클래스
       void myMethod() { 
             class LocalInner { //지역 내부 클래스
                   int iv = 300; 
-                  static int cv = 300;          // (Java버전에 따라 다르다)에러! static변수를 선언할 수 없다. 
+                  //static int cv = 300;          // (Java버전에 따라 다르다)에러! static변수를 선언할 수 없다. 
                   final static int CONST = 300; // final static은 허용
             }
             

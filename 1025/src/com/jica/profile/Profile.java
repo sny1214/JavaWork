@@ -1,19 +1,17 @@
 package com.jica.profile;
 
 class Profile {
+
 	String name;
-	int age;
+	String sex;
+	String age;
+	String number;
 	String email;
-	int number;
 	String address;
-	String sex = "";
 	String character;
 	
-//	if(sex == "남" || "남자") {
-//		this.sex = "남자";
-//	}else {
-//		this.sex = "여자";
-//	}
+	//				name, sex, age, number, email, address, character
+	//Profile ---> [null,null,null,   null,	 null,	  null,		null] 
 	
 	
 	Profile(){
@@ -33,8 +31,6 @@ class Profile {
 		this.sex = profile.sex;
 		this.character = profile.character;
 	}
-
-	
 	
 	
 	public String getName() {
@@ -92,7 +88,13 @@ class Profile {
 	public void setCharacter(String character) {
 		this.character = character;
 	}
-
+	
+	
+	
+	
+	
+	
+	
 	@Override
 	public String toString() {
 		return "Profile [name=" + name + ", age=" + age + ", email=" + email + ", number=" + number + ", address="
@@ -100,3 +102,11 @@ class Profile {
 	}
 	
 }
+
+
+
+//if(sex == "남" || "남자") {
+//	this.sex = "남자";
+//}else {
+//	this.sex = "여자";
+//}

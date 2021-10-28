@@ -183,7 +183,9 @@
  				  (예전에는 enumeration으로 표현)
  	listIterator: 전체요소를 빠짐없이 양 방향에서 읽어오기
  				  																keySet 	 : key값들만 set으로 읽어오기
- 				  																values	 : Value들만 Collection으로 읽어오기
+ 				                                                 
+  *** ArrayList의 사용법을 충분히 숙지하면 나머지 클래스들의 사용법은 어렵지 않습니다.
+                                                 																values	 : Value들만 Collection으로 읽어오기
  	
 -----------------------------------------------------------------------------------------------------------------------------------
 ArrayList의 사용법
@@ -196,7 +198,64 @@ ArrayList()	: 기본 저장공간으로 10개의 데이터를 저장할 공간�
 ArrayList​(int initialCapacity) : 최초 생성시 기본 저장공간 크기를 지정
 ArrayList​(Collection<? extends E> c) : 최초 생성시 인자로 전달된 다른 컬렉션 객체와
 									   동일한 값을 가지는 객체를 생성하는 것
+		
+참고) Iterator -- 다양한 커렉션 객체들의 내부 데이터 저장 구조가 모두 각기 다 다르다.
+				 전체요소를 접근하려면 각 객체의 저장구조에 따른 다른 접근 방법을 사용하면 너무 불편하다.
+				 그래서 공통된 접근방법을 제공하고 있다. 이것이 Iterator이다.
+				 Iterator interface이다.
+				 
+				 Iterator it = 컬렉션객체.iterator();
+				 
+	 jdk에서 제공하는 interface나 abstract class를 이용하여 사용자가 직접 클래스를 만들어서
+	 (interface이면 implements, abstract class 이면 상속받아 추상메서드를 overriding 시켜서)
+	 객체를 생성할 수 있다.
+	 
+	 그런데 jdk내부에서도 interface나 추상클래스를 이용하여 만들어진 클래스가 존재할 수 있다.
+	 
+	
 									   
+참고) 타입 파라메터(Type parameter)를 적용하여 다양한 타입의 객체를 멤버변수나 메서드에서 다루게 하는 기법
+	 ==> 일반화 프로그래밍 (Generics-지네릭스)
+	 
+	 (도움말 : ArrayList<E> 에서 E : 한건의 자료형)
+	 (파라메터 안 정해주면 다 Object의 자료형으로 된다 --> 그러므로 모든 객체를 저장할 수 있다.)
+
+	-------------------------------------------------------------------------------------- 
+	 class A<T> {
+	 	T value;			//멤버변수
+	 	
+	 	void method(T value ) {		//메서드의 매개변수
+	 		this.value = value;
+	 	}
+	}
+	---------------------------------------------------------------------------------------
+	A 클래스는 객체 생성 시 주어지는 타입(자료형)에 의해 클래스의 구조가 완전해진다.
+	A<Integer> aObj = new A<Integer>(); --> aObj만든 클래스의 원형은 <T> 사라지고 다 Integer로 바껴
+	------------------------------------------------------------------------------------------
+		 class A {
+	 		Integer value;			//멤버변수
+	 	
+	 	void method(Integer value ) {		//메서드의 매개변수
+	 		this.value = value;
+	 	}
+	}
+	
+	A<Integer> aObj = new A<Integer>();
+	--------------------------------------------------------------------------------------------
+	  |--A<String> aObj = new A<String>();
+	--v---------------------------------------------------------------------------------------
+		 class A {
+	 		String value;			//멤버변수
+	 	
+	 	void method(String value ) {		//메서드의 매개변수
+	 		this.value = value;
+	 	}
+	}
+	
+	A<String> aObj = new A<String>();
+	--------------------------------------------------------------------------------------------
+
+	
 
 참고) 모든 컬렉션 객체는 내부구성요소로 객체만을 가진다. 즉 Object형(최상위 클래스)을 내부요소로 가진다는 의미					
 	 Java 5.0버전 이후부터는 가급적이면 동일한 종류의 객체만을 내부요소로 관리하기를 권장한다.
@@ -218,6 +277,159 @@ ArrayList​(Collection<? extends E> c) : 최초 생성시 인자로 전달된 �
 	 list.add(10);
 	 list.add(new Date()); //error ---> list.add(new Integer(20))
 	 list.add(3.14);	   //error ---> list.add(Integer.valueOf(30));
-	 list.add(new Item("새우깡",1000));		
+	 list.add(new Item("새우깡",1000));			
+	 		   
+	 		   
+	 		   
+	 		   	 
+	 
+============================================================================================================	 
+실무적인 코딩에서는 컬렉션 객체의 내부구성요소로 사용자가 만든 클래스의 객체를 관리하는 것이 대부분이다.	
+---------------------> 1건의 데이타를 표현한 클래스
+					   엔티티 클래스(Entitiy class), 커스텀 클래스(custom class), 자바빈(JavaBean)	 		
+					   
+만일 주소록 관리를 한다면 1건의 주소정보를 표현하기 위해
+Profile클래스를 만들었다면 우리는 ArrayList를 다음과 같이 선언하여 사용할 것이다.
 
+ArrayList<Profile> profiles = new ArrayList<Profile>();
+
+//1건의 신상명세를 추가
+Profile profile = new Profile("홍길동", 27, "010-1111-1111", "hong@daum.net", null);
+profiles.add(profile);
+
+--------------------------------------------------------------------------------------------------------------
+Collections 클래스는 컬렉션 객체에서 공통으로 필요한 유용한 기능을 제공한다.
+대표적으로 sort()메서드를 사용해보자.
+
+커스텀 클래스를 구성요소로 가진 컬렉션 객체에서 정렬기능 수행하려면
+내부적으로 비교하는 기능이 필요하다. 그래서 Comparable interface를 제공하고 있다.
+
+우리는
+1) 커스텀클래스에서 java.lang.Comparable 인터페이스를 구현하면
+   정렬시 기본 비교방법으로 해당 메서드(compareTo())를 호출하여 그 결과에 따라 정렬한다.
+	==> 기본 정렬 기준(단 1개만 작성)
+	  
+2) 다른 정렬 기준을 적용하고 싶다면 java.util.Comparator 인터페이스를 외부에서 구현하여 정렬시키면서
+   정렬기준을 함께 사용한다.
+	==> 다른 정렬 기준 (상황에 따라 여러개가 가능하다)
+	  	 	
+	교재 628 page~630page에 Comparable와 Comparator의 사용법이 설명되어 있다.
+------------------------------------------------------------------------------------------------------------
+Vector 클래스는 Java언어의 초창기부터 사용했던 선형구조로 데이터를 표현할 때 사용해 왔던 클래스이다.
+Java 1.2이후 버전에서부터는 컬렉션 프레임워크에 포함해서 개선하여 클래스를 재정비 했다.
+그러다 보니 예전의 메서드와 동일기능을 수행하는 새로운 메서드도 함께 사용된다.
+또한, 내부저장공간 ==> capacity도 관리하는 기능을 가지고 있다.
+일반적인 사용법은 ArrayList와 유사한데 추가적인 메서드도 가지고 있습니다.
+
+Vector와 같은 클래스를 하위 호환성을 위한 클래스라고 부른다.
+
+교재 591page의 MyVector class는 사용자가 Vector클래스를 직접 만든다면 이렇게 만들 수 있을 것이라는 의미의
+예제 코드이다.
+---------------------------------------------------------------------------------------------
+
+LinkedList 사용법
+	- ArrayList와 동일하게 순서가 중요하고, 데이터 중복을 허용한다.
+	- 내부적으로 데이터를 저장하기 위해 Node를 이용한다(Node는 1건의 데이터)
+		class Node{		==> single Link 				단방향 SingleLinkedList
+			Object value;	//데이터
+			Node next;		//다음 데이터의 위치정보
+		}
+		
+		class Node{		==> double Link					양방향 DoubleLinkedList
+			Node previous;								======================
+			Object value;								java.util.LinkedList는 양방향 원형구조를 내부적으로
+			Node next;
+		}
+		
+	LinkedList list = new LinkedList();
+	list.add(10);							v------|		v-------|
+	list.add(20);				[null,10,0x200]	[0x100,20,0x300] [0x200,30,null]
+	list.add(10);				0x100		|--> 0x200		|-->  0x300
+	
+	- 데이터의 추가나 삭제 작업이 용이하다(이유: 링크만 조절하면 ok)
+	- 접근(access) 속도가 느리다.(링크를 따라서 검색)
+	- LinkedList는 자체적으로 stack관련 메서드를 가지고 있다.
+					데이터 추가 : push
+					데이터 삭제 : pop
+					
+	- LinkedList는 Queue 인터페이스를 구현하였으므로 queue관련 메서드도 가지고 있다.
+					데이터 추가 : offer
+					데이터 삭제 : poll
+				
+	- ArrayList보다 좀더 풍부한 메서드를 가지고 있다.
+	
+	참고) System클래스의 public static long currentTimeMillis() 메서드는
+		 1970년 1월 1일 0시 0분 0초 0ms -- 0
+		 					  0.5초  -- 500
+							  1초  -- 1000
+							  2초  -- 2000
+							  ~
+		 2021년 10월 28일 16시 19분 47초 -- ? 1635402210409                        
+		  
+=================================================================================		  
+LinkedList에는 스택과 큐 관련 메서드가 정의되어 있다.
+또한 스택은 별도의 클래스 Stack도 존재한다.
+Queue는 별도의 클래스가 없고 interface로 제공되고 LinkedList에서 Queue interface를 구현했다.
+
+스택(Stack) : LIFO(Last In First Out) - 후입선출
+	일상의 예) 접시쌓기, 막다른 골목의 자동차 주차, ...
+	용어) 	 
+			 |10|20| | | |
+			       ^
+			 	   |
+			   top 2 
+			 
+			 10 추가				===> 추가 	 push	add
+			 20 추가
+			 30 추가
+			 제거(삭제) - 30      ===> 삭제 	 pop	remove
+			 읽어오기				===> 읽어오기  peek	
+			     				===> 검색			search
+			 
+	별도의 Stack 클래스
+   ===================
+   boolean 		empty()
+   E  peak()
+   E  pop()
+   E  push(E item)
+   int 	search(Object o)
    
+   
+   
+   LinkedList의 Stack관련 메서드
+  ============================
+   E  pop()
+   E  remove()
+   void push(E e)
+   boolean add(E e)
+   E peek()
+   
+   
+큐(Queue) : FIFO(First In First Out) - 선입선출
+	일상의 예) 택시정류장의 줄서기, ...
+	용어)  삽입위치 rear  2
+			      	   |
+			           v
+			      | |20|30| | |
+			      ^
+			      |
+		  삭제위치 front 0 
+		  
+		  			 
+			 10 추가				===> 추가 	 offer	
+			 20 추가
+			 30 추가
+			 제거(삭제) - 30      ===> 삭제 	 poll	
+			 읽어오기				===> 읽어오기  peek	
+			     				===> 검색	 search
+			     				
+   
+   	Queue의 Stack관련 메서드
+  =========================
+   E  peek()
+   E  poll()
+   boolean  offer(E e)
+   ...
+   			     			
+
+  
