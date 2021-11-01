@@ -102,7 +102,10 @@ public class Profile implements Comparable<Object>{
 
 	}
 	
-	
+	public Profile set​(int index, Profile element) {
+		
+		return element;
+	}
 	
 	
 	

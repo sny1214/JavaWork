@@ -1,0 +1,78 @@
+CUI : Charactor 중심, 순차처리
+GUI : Graphic 중심, 이벤트 중심처리
+
+
+이클립스 Window메뉴에서 preference에서 filter 검색 -> 왼쪽 메뉴에서 Type Filters 클릭 -> awt 체크 해제
+
+java.awt, java.awt.event 에 대부분 들어가있다
+
+
+<가장 기본화면 : 윈도우 라고 부름>
+윈도우 중심
+배경화면 상단의 시작위치 x,y 좌표로 얼마나 떨어져 있는가? 폭, 세로가 몇 픽셀?
+타이틀바 왼쪽에 시스템 메뉴 중앙에 윈도우의 타이틀 = 제목, 오른쪽에 크기조절상자 등..
+그아래줄에 시스템 메뉴, 툴바나 메뉴
+경계선에 마우스 드립앤 드롭 하면 크기 줄일 수 있음 -> 테두리선
+오른쪽, 아래에 sum이 있어 상대적 위치 나타냄-scrollbar
+화면은 작업 영역
+
+사용자가 마우스나 키보드 통해 변화를 주면(행위) 프로그램에선 '이벤트'라고 인식 -> 해석해 기능처리
+-> 작업영역에 있는 내용들을 변화시켜 사용자에게 보여줌
+<이벤트 중심처리>
+
+componenet내부 구성요소를 container, Lable이 상속받음
+Lable : Button, TextField, TextArea, Checkbox, CheckboxGroup, List, Choice, Scrollbar, 직접 드로잉 가능한 도구 Canvas
+		=>단일기능 component(한가지 기능만 해)
+Container : 다른 구성요소 가지고 있으면서 관리하는 기능, 윈도우를 지칭
+			추가/삭제 가능
+			container 상속 받아 Window, panel 만들어
+			
+			window: os가 단독으로 실행 가능/ 제목, 툴바나 메뉴, 테두리선 자체가 없음, 작업 영역만 가진 윈도우, 윈도우로 객체 직접 생성하지 않음
+					frame이 화면,크기조절상자, 테두리선, 메뉴항목 다 가질 수 있는 것(윈도우 상속)
+					frame, dialog
+					
+					frame : os에서 단독실행 가능
+							사용방법
+							1. frame 직접 사용하는 것, 2. 상속받아서 꾸밈 : user frame
+					
+					dialog: os에서 단독실행x, 다른 프레임이나 다이아로그에서 보조기능을 수행하도록 실행시킨다.
+							다른 프레임이나 다이아로그가 떠있어야 보조기능 수행하도록 별도의 창이 필요
+							file dialog가 상속
+							
+							file dialog : 단독으로 실행x, 현재 작업 보조 예) 어디에 저장할지 뜨는 창 
+			
+			panel: 단독 실행 x, container 라는 박스 내에 작은 박스 개념
+				   일부 화면 영역을 책임지고 구현하는 기능,
+				   Applet : 웹 브라우저의 일부 영역, 자바 프로그램이 일부영역에 동작하게 하는 것
+									
+화면 구성 배치 방법 : Layout이라 해, 다양하게 있음
+window 계열에 들어 있는 내부 구성요소를 화면에 배치할 때 기본적인 배치 방법이 BorderLayout 내부구성요소를 동서남북 배치
+panel 계열은 기본적인 배치 방법이 FlowLayout 내부구성요소를 연결 순서에 맞춰서 순차적으로 배치를 하는 것
+
+이벤트 처리 : 사용자가 어떤 행위(이벤트)를 가하면 어떤 변화(기능)가 일어나도록 하나하나 코드 작성해 놓음
+			이벤트를 받는 게 내부구성요소나 윈도우나 패널 등..
+			ui변화시켜 사용자가 인지
+			
+			실질적으로 화면 ui에 보여지는 값data 컬렉션 프레임워크에 들어가 있는 arraylist hash map과 같은 데에 데이터 저장하고 있다가
+			그 속의 데이터를 화면 ui에 반영시키고 보여줌
+			데이터 내부에 숨어있고 보여주는 방법을 window를 써서 화면에 나타내는 것!
+		
+		
+1.frame 만듬(사용자에게 최종적으로 보여지는것)
+2.내부구성요소를 만들어서 화면에 배치
+3.이벤트 처리
+4.사용할 데이터를 관리해줄 수 있어야 함
+	 
+
+	 
+	 
+				 				Component(모든 UI객체)
+				 		Container			Label
+				 			|				: Button, TextField,Checkbox	---|
+	 				|----------------|		  List, TextArea, CheckboxGroup,---| 개별 기능		
+				 Window				panel	  Choice, Scrollbar, Canvas		---|Component
+				 |					 |
+			|-----------|		  Applet
+		  Frame	      Dialog		
+			|		    |
+      (user Frame)   File Dialog				 

@@ -1,0 +1,21 @@
+1. 모든 UI객체는 각각의 이벤트처리를 위한 준비가 되어 있다.
+   1) 이벤트 소스 : 사용자의 이벤트에 반응하는 UI객체
+                 Frame, Panel, 개별기능Component(Button, Checkbox,....)
+   2) 이벤트 핸들러 클래스는 각 이벤트 소스마다 다르게 interface 혹은 class로 준비되어 있다.
+      Frame의 x버튼 클릭시 윈도우 종료
+          WindowListener interface, WindowAdapter class의
+          public void windowClosing(WindowEvent e)
+          
+      Button을 클릭했을때, TextField에서 엔터키를 눌렀을때, 메뉴항목을 선택을때 
+          ActionListener의 public void actionPerformed(ActionEvent e)
+          
+      Checkbox의 항목 선택/해제시, List, Choice 
+          ItemListener의 public void itemStateChanged(ItemEvent e)       
+          
+   3) 이벤트 핸들러 클래스로 객체를 생성하여 이벤트핸들러를 등록
+      이벤트소스.addXXXListener(이벤트핸들러 객체)
+
+2. 이벤트 핸들러 클래스를 작성해어 이벤트 핸들러 객체 생성의 여러가지 방법
+   1) 단독으로 핸들러 클래스 작성 ---> 객체 생성
+   2) 익명의 클래스를 이용하는 방법
+   3) Frame에서 구현하는 방법             

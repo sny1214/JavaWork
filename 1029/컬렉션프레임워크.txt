@@ -1,0 +1,94 @@
+컬렉션 프레임워크의 인터페이스 계층도
+
+             <<interface>>
+               Collection
+              
+     <<interface>>   <<interface>>      <<interface>>
+        List              Set                 Map ==>key+value의 쌍(pair)으로 데이타를 관리 ==>Entry클래스
+      순서가 중요          순서는 중요하지 않음     key  -  중복불허                                   
+      중복은 허용          중복은 불허           value - 중복을 허용
+         .   <<interface>>  .                   .
+         .       Queue      .                   .
+         .                  .                   .
+         .                  .                   .  
+     =========우리가 실제 사용법을 익혀 사용할 대표적인 클래스=====================    
+       ArrayList         HashSet             HashMap
+       LinkedList        TreeSet             TreeMap
+       Stack               ...
+       ~~~~~~~~~~~~~~~~~예전부터 사용해 오던 클래스~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+       Vector                                HashTable          
+        ...                                  Properties
+                                               ...
+  교재예제(스택과 큐의 응용)----------------------------------------------------
+  교재에서 스택을 응용한 예제
+  StackEx1.java (웹페이지에서 앞으로가기/뒤로가기)  
+  ExpValidCheck.java ==> 3 + (5 * 2);    수식을 평가할때 
+  
+  교재에서 큐를 응용한 예제
+  QueueEx1.java    
+  -----------------------------------------------------------------------
+  
+Set 관련 클래스의 사용법
+  - 순서를 관리하지 않으면서 동일데이타가 중복저장되 않도록 관리한다 
+  - ---처음/끝/이전/다음--몇번째--X-
+1) HashSet - 내부에 데이타를 저장할때 배열을 사용한다.
+             특정로직을 작동시켜 저장여부와 저장위치를 결정하여 저장한다.(순차적으로 저장되지 않는다)
+             -------hashCode(),equals()
+
+2) TreeSet - 내부에 데이타를 저장할때 Tree구조를 사용한다.   
+                  이진트리(binary tree)
+                  시작위치 - root Node
+                  작은값의 위치는 왼쪽에, 끝값의 위치는 오른쪽에 저장한다.
+                  ==>
+                  class TNode{
+                      TNode left;
+                      Obeject value;
+                   	  TNode right;   
+                  }
+                  
+        29, 46, 38, 7, 20의 데이타를 이진트리에 저장한다면
+        
+                 root-----> 29 
+                        7       46
+                          20  38  
+                          
+            데이타를 추가/수정/삭제할때 데이타를 위의 규칙으로 검색해 나가면서 노드의 링크를 조정한다
+            전체데이타를 순회할때  In Order방식   left root right
+                             Pre Order    root left right
+                             Post Order   left right root
+                             Level Order  계층구조순으로 
+            오름차순으로 데이타를 접근하고 싶다면 In Order방식을 사용                 
+                        7  20  29  38 46   
+ ============================================================
+ Map :  순서를 관리하지 않는다.
+        key-value의 쌍(pair)으로 관리한다 ===> Entry 내부클래스 사용
+        key는 중복을 허용하지 않고, value는 중복될수 있다.
+   
+   참고) Vector클래스를 예전부터 사용해 오다가 ArrayList로 그기능 개선 발전시켰고
+        Vector클래스는 하위호환성을 위해 계속 사용하고 있다.
+        이와 동일하게 HashTable도 HashMap으로 개선 발전 시켰다.
+     
+   Map은 key-value의 쌍을 클래스로 표현할때 Entry 내부클래스를 사용하고 있다.   
+      class HashMap ...{
+         Entry[] table;
+         ...
+         static class Entry implements Map.Entery{
+            final Object key;
+            Object value;
+             ....
+         }
+         ...
+      }  
+           
+1) HashMap : 
+     V	put​(K key, V value)   추가와 함께 수정기능도 작동
+     V	get​(Object key)       key로 저장된 값 읽어오기
+     Set<K>	keySet()          저장된 모든 key값들을 Set으로 만들어서 리턴해 준다.
+     Collection<V>	values()  저장된 모든 value들을 Collection객체로 리턴해 준다.
+     Set<Map.Entry<K,​V>>	entrySet() 저장된 key-value 모두를 Set으로 만들엇 리턴해 준다.
+     V	remove​(Object key)    key에 저장된 value와 key모두 삭제한다.
+     V	replace​(K key, V value)   key에 저장된 value를 변경한다.  
+     boolean	containsKey​(Object key)   특정 key나 value의 존재여부	
+     boolean	containsValue​(Object value)
+     ...                                   
+2) TreeMap : 

@@ -1,0 +1,15 @@
+실습한 Profile객체를 사용하여  ProfileManager 클래스를 만들어서
+주소록 관리 기능을 작성하시오.
+
+class ProfileManager{
+   ArrayList<Profile> profiles = new ArrayList<Profile>();
+   
+   생성자
+   추가메서드()
+   수정메서드()
+   삭제메서드()
+   검색메서드()
+   정렬메서드()
+   전체목록보기메서드()
+}
+
