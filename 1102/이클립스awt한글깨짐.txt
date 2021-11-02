@@ -1,0 +1,5 @@
+실행 환경설정(run configurations...)에서
+두번째탭(Arguments)에서
+VM Options에 아래의 문자셋을 지정해준다.
+
+-Dfile.encoding=MS949

@@ -1,0 +1,57 @@
+배치관리자(LayoutManager) : Container계열의 클래스에는 
+  구성요소를 가지고 있다.  이때 이러한 구성요소를 사용자가 작업하기 편리한 형태로
+  위치와 크기를 지정하여 화면을 구성하는 기능을 담당한다.
+
+배치관리자의 지정은 아래의 메서드를 사용한다.
+ 
+Container계열객체.setLayout(배치관리자객체);
+
+Container계열객체.setLayout(null); //배치관리자가 없다.
+   						         //내부구성요소를 추가한 후 반드시 위치와 크기를 지정한 후 추가(연결)한다.
+                    
+대표적인 배치 관리자
+    <<interface>>
+    LayoutManager
+        .
+        . implements(구현)        
+        .                
+  FlowLayout, BorderLayout, CardLayout, GridLayout, GridbagLayout, ...
+ 
+각각의 배치관리자들은 고유의 배치방법이 설정되어 있다.
+1) FlowLayout : 추가된 순서대로 차례로 구성요소를 배치한다.
+2) BoderLayout : 추가할때 동/서/남/북/중앙의 위치를 지정한다.
+3) GridLayout : 엑셀의 표처럼 동일한 크기를 가진 행과 열로 내부구성요소를 차례로 배치한다.
+4) GridbagLayout : 엑셀의 표에 셀들을 필요에 따라 통합하는 기능처럼 위치지정이 가능하다.
+5) CardLayout : 책페이지를 넘기듯이 화면을 교체시킬수 있다.
+   ...   
+위의 배치관리자 이외에도 많은 배치관리자가 있다. 그 중 대표적인 배치관리자만 살펴본 것이다.
+
+
+Frame(Window계열 Container)은 사용자가 배치관리자를 지정하지 않으면 기본으로 BorderLayout을 배치관리자로 가진다.
+Panel은						     //          //            //    FlowLayout을   //       //
+       
+       
+사용법)
+1) FlowLayout
+2) BorderLayout  -- 내부구성요소를 추가할때
+                    미리정해진 상수값이 문자열로 위치를 지정해야 한다.
+       
+       위치지정 문자열 ==>"North","South","East","West","Center"
+    add(UI객체,위치지정문자열)
+    
+       위치지정 상수 ==> BorderLayout.NORTH
+       			  BorderLayout.SOUTH
+			      BorderLayout.EAST
+			      BorderLayout.WEST
+			      BorderLayout.CENTER ==>사용하지 않은공간이 있으면 확장된다.
+    add(UI객체, 상수)
+    
+       만일 단독을 add(UI객체)를 사용하면 Center이 적용된다.
+             크기는 frame전체영역으로 확장한다. 			                      
+3) GridLayout : 표형식으로 동일한 크기를 가지는 셀내부에 컴퍼넌트를 배치한다.
+4) GridbagLayout : GirdLayout형태에서 필요하다면 특정 셀들을 병합시켜 배치할 수 있다.
+                  이때 합칠 셀정보를  GridBagConstraints로 표현한다.
+                  주의) 행열의 요소 지정시 열 우선이므로 (열-x,행-y)의 표현법을 인지하자.
+
+5) CardLayout : 화면을 슬라이드처럼 교체시키는 화면구성
+                마우스이벤트와 결합시켜서 많이 사용한다.

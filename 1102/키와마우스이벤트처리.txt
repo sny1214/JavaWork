@@ -1,0 +1,32 @@
+1) high level 이벤트 처리
+   - Component객체(Window계열, Panel계열, 개별기능Component)에 대한 이벤트 처리
+   - Button : addActionListener(ActionLister객체)
+   - List,Choice, Checkbox : addItemListener(ItemLister객체)
+   - Window계열 :addWindowListener(WindowListener개체)
+   
+   Component마다 이벤트처리방법이 정해져 있다.
+   
+2) Low level 이벤트 처리
+   -키보드나 마우스에 대해 직접 이벤트 처리를 한다.
+   
+      키보드 : 키보드를 한번 누르고 띄면('A')  내부적으로는 이벤트들이 발생한다.
+         	이를 관리하는 interface가 KeyListener 이다.
+           
+          void	keyPressed(KeyEvent e)   -->'A'누르는 순간
+		  void	keyReleased(KeyEvent e)	 -->'A'떼는 순간
+		  void	keyTyped(KeyEvent e)	 --> 문자 키 누른 거라면..(pagedown, pageup 키 등은 여기 해당x)
+       
+     마우스 : 마우스는 MouseListener,MouseMotionListener, MouseWhellListener 에 의해 이벤트가 관리된다.
+             
+         MouseListener
+         void	mouseClicked(MouseEvent e)
+		 void	mouseEntered(MouseEvent e)	//특정 component 안으로 들어갈 때
+		 void	mouseExited(MouseEvent e)	//특정 component 밖으로 나갈 때
+		 void	mousePressed(MouseEvent e)
+		 void	mouseReleased(MouseEvent e)
+		 
+		 MouseMotionListener
+		 void	mouseDragged(MouseEvent e)
+		 void	mouseMoved(MouseEvent e)
+
+		 ==>MouseAdapter
