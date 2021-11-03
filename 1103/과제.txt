@@ -1,0 +1,26 @@
+com.jica.thread.awt의 BirdMove의 예제에서
+1. 예시된 예제 이해하기
+2. 새를 여러마리가 동시에 움직이게 하려면 어떻게 해야할까?
+   별도로 Bird클래스를 작성하여
+   
+   class Bird extends Thread{
+     새와관련된 모든 멤버변수
+     
+     public void run(){
+        새의 좌표와 방향을 이동
+        cavas객체.repaint()
+     }
+     
+      public void paint(Graphics g){
+         g객체를 이용하여 새를 그린다.
+      }
+   }
+   
+   class BirdCanvas ...{		
+      Bird birds[] = new Bird[2]; //thread객체
+      ....
+     public void paint(Graphics g){
+         bird[0].paint(g);  //작동시킨다.
+         bird[1].paint(g);
+     } 
+   }

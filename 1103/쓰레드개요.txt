@@ -1,0 +1,344 @@
+1. 쓰레드 개요
+
+용어)
+프로그램(program) --- 실행가능한 코드를 가진 화일
+프로세스(process) --- 프로그램이 메모리에 load되어 cpu에 의하여 
+                                     현재  실행되고 있는 상태일때 프로세스라고 부른다.
+                    (시스템 자원(resource-메모리,입출력장치)을 획득 하는 단위)
+쓰레드(thread) --- process 내부에서 cpu를 독점하여 실행되는 실행단위
+                                독자적인 메모리공간(스택영역)을 사용한다.  
+
+현재까지는 단일 쓰레드 프로그램 이었다.
+   Test.java--->Test.class-------->메모리에 로드되어 실행(프로세스)
+                이때 main()메서드가 실행될때 main Thread가 생성되어 실행된다.
+                                                                                     
+멀티 쓰레드 프로그램
+   1) main Thread
+   2) main Thread에서 작업쓰레드를 생성하여 실행시킨다(work thread)
+
+Java언어에서의 쓰레드관련 기능은 Thread클래스로 제공된다.
+여기에는 다양한 메서드들이 있다.
+
+참고) cpu가 1개일때
+         단일 쓰레드 프로그램과
+         멀티 쓰레드 프로그램의 실행시간을 비교해보면 멀티 쓰레드 프로그램이
+         오랜시간이 걸리는것이 당연하다.(쓰레드를 교체할때 현재상태 저장하고 교제되는 쓰레드를 위한 준비(복원)
+         작업에 소요되는 시간이 있기때문) 
+         
+         그러나 요즘은 cpu가 1개여도 마치 cpu가 여러개인것처럼 동작시키는
+         멀티코어를 사용하고 있기때문에 별로 속도 차이가 없다.                                             
+2. Java에서의 Thread 작성방법 2가지
+     <<interface>>
+       Runnable
+     --------------
+     + run() : void
+     
+          구현
+          
+       Thread
+     --------------
+      멤버변수...
+     -------------- 
+      + Thread()
+      + Thread(String)
+      + Thread(Runnable)
+      + Thread(Runnable,String)
+        ...
+      + run(){}     
+      + static activeCount() : int
+      + static currentThread() : Thread
+      + static sleep(long) : void
+      + getId() : int
+      + getName() : String
+      + getPriority() : int
+      + getThreadGroup() : ThreadGroup
+      + start() : void ======>OS가 인지하는 쓰레드동작 시작(run()메서드의 내용이 실행된다.)         
+          
+   참고) Thread객체와 OS가 인지하는 쓰레드는 차이가 있다.
+   		Java언어에서 객체(멤버변수, 메서드) --> Thread객체
+   		OS가 인지하는 쓰레드 --> Thread객체의 run()메서드 내부의 실행코드가
+   							 CPU를 독점하여 실행할 수 있는 쓰레드이다.       
+          
+        자동으로 만들어지는 main쓰레드는 main()메서드의 내용이 쓰레드 내용이다.
+        우리가 만드는 작업쓰레드는 run()메서드 내부의 실행코드가 쓰레드의 내용이 된다.
+        	  
+   1) 첫번째 방법 - Thread class를 상속받아 run()메서드를 재정의 한다.   
+   
+      class UserThread extends Thread{
+          ...
+          @Override
+      	  public void run(){
+      	    //쓰레드에서 동작시킬 코드
+      	  }
+      }    
+      
+      UserThread ut = new UserThread();	//쓰레드 객체가 만들어지면 -- 쓰레드는 New 상태(아직 실행되는 단계x)
+      ut.start(); //쓰레드 동작 시작 -- 쓰레드 상태는 RUNNABLE 상태
+      
+   2) 두번째 방법 - Runnable interface를 구현하여 run()를 재정의 한다.
+      
+      class UserRunnable implements Runnable{
+          ...
+          @Override
+      	  public void run(){
+      	    //쓰레드에서 동작시킬 코드
+      	  }
+      }
+      
+      UserRunnable ur = new UserRunnable();
+      Thread th = new Thread(ur);
+      th.start(); //쓰레드 동작 시작
+      
+    
+    - start()메서드는 생성된 Thread객체의 내용중 run()메서드의 내용을
+      OS가 인지하는 쓰레드로 만들어서 실행을 시킨다.
+      이때 각 쓰레드마다 별도의 메모리공간(별도의 stack)을 사용한다. 
+      public static void main(String args[]){
+          UserThread ut = new UserThread();
+          ut.start();		//쓰레드명은 자동으로 Thread-0가 설정된다.
+          
+          UserRunnable ur = new UserRunnable();
+          Thread t = new Thread(ur); //쓰레드명은 자동으로 Thread-1이 설정된다.
+          t.start();
+          
+      }
+	       |                  |              	|
+	       |                  |throwException() |
+ 	       |                  |run()         	|  
+	 main()|--------          |--------      	|---------     
+	       stack(main쓰레드)    stack(thread0)  	 stack(thread1)
+      
+      			현재 쓰레드 3개
+      			쓰레드를 만들때마다 stack공간이 별도로 만들어진다.
+      
+      만일, run()메서드를 직접호출하면 이것은 쓰레드로 동작하지 않고
+      현재의 쓰레드에서 메서드를 호출한것뿐이다.
+       public static void main(String args[]){
+          UserThread ut = new UserThread();
+          ut.run();	//user쓰레드 만들어서 직접 호출-->os가 인지하는 쓰레드가 아니다. 단순 메서드 호출
+          
+          UserRunnable ur = new UserRunnable();
+          Thread t = new Thread(ur);
+          t.run();
+          
+          System.out.println("끝");
+      }
+           |
+           |
+    run()  |         
+    main() | ^
+           |-------- 
+            stack(main쓰레드)
+      
+ 참고)멀티쓰레딩 프로그램에서는 CPU의 성능개선위한 만들어진 
+     Core의 갯수가 많을수록 처리속도가 좋아진다.
+     CPU - Core 1  
+     
+     CPU - Core 2    
+     
+  쓰레드는 처리속도를 빠르게 하려는 목적에서도 사용하는 경우가 있지만
+  주도 목적은 업무자체가 동시에 수행되어 할 기능일때 사용한다.
+  예을 들어 채팅시 보내는 메세지를 입력하여 보내는 기능과(예:scanner.nextLine())
+              보내는 동안 다른 접속자로부터 메세지가 수신하는 기능이 함께 필요하다.
+   
+3. 쓰레드 우선순위(Priority)
+   우선순위가 높을수록 cpu를 많이 사용할 수 있다.
+   
+   priority는 1~10까지의 값으로 지정한다.
+   (우선순위 클수록 cpu를 더많이 차지해서 더 빨리 처리가능)
+   
+   우선순위를 읽어오거나 변경하는 메서드
+   int	getPriority()
+   void	setPriority(int newPriority)	
+   
+   우선순위 관련 상수값
+   public static final int	MAX_PRIORITY	10
+   public static final int	MIN_PRIORITY	1
+   public static final int	NORM_PRIORITY	5 
+    
+   Thread를 생성하면 기본우선순위값은 NORM_PRIORITY로 지정된다(5)   
+
+4. 일반쓰레드와 데몬(daemon thread)
+   일반 쓰레드는 작업 쓰레드이다.
+   쓰레드를 생성한 부모 쓰레드가 종료해도 일반 쓰레드의 실행코드가 남았다면 계속 실행한다.
+
+   public static void main(String args[]){ <== main Thread
+      //여기서 쓰레드객체를 생성하여 실행(start())시키면 작업쓰레드가 생성된 것이다.
+      //     ----------101~200까지 출력--------------------
+      
+      //1~100까지 출력 -- 1초간 멈춤
+   }   
+   
+   데몬쓰레드는 작업을 도와주는 보조기능을 수행하는 쓰레드로 많이 사용된다.
+   데몬쓰레드는 자신을 생성한 부모쓰레드가 작업을 종료하면 데몬쓰레드도 작업을 강제 종료하는 성격을 가졌다.
+   
+   //main쓰레드에서 작업쓰레드를 만들었으므로
+   //main쓰레드는 부모쓰레드가 되고 작업쓰레드는 자식쓰레드가 된다.
+   
+   //작업쓰레드가 일반쓰레드이면 부모쓰레드의 기능이 끝났어도 작업쓰레드는 작업을 끝까지 계속한다.
+   //작업쓰레드가 데몬쓰레드이면 부모쓰레드의 기능이 끝났으면 작업쓰레드는 작업이 남아있다해도 즉각 종료하고 끝난다.
+   
+   데몬 쓰레드 지정
+       void	setDaemon(boolean on); //true
+   데몬 쓰레드 여부 확인
+       boolean	isDaemon();
+   
+참고) 현재쓰레드의 실행 지정한 시간동안 멈추도록 설정하는 메서드가 
+     Thread.sleep(millis);  // millis는 1이 1/1000 초라는 의미이다.
+     
+     1. 쓰레드
+       Thread
+     --------------
+      멤버변수...
+     -------------- 
+      + Thread()
+      + Thread(String)
+      + Thread(Runnable)
+      + Thread(Runnable,String)
+        ...
+      + run(){}     
+      + static activeCount() : int
+      + static currentThread() : Thread
+      + getId() : int
+      + getName() : String
+      + getPriority() : int
+      + getThreadGroup() : ThreadGroup
+      + start() : void ======>OS가 인지하는 쓰레드동작 시작(run()메서드의 내용이 실행된다.)         
+      + setDaemon(boolean) : void
+      + isDaemon() : boolean
+        쓰레드 상태 즉, 실행제어(스케쥴링)와 관련된 메서드들
+      + join() : void
+      + resume() : void
+      + static sleep(long) : void
+      + stop() : void
+      + suspend() : void
+      + static yield() : void
+        ~~~~~~~~~~Object클래스의 메서드중 쓰레드 동기화 관련 메서드
+	    void	notify()	
+        void	notifyAll()
+        void	wait()	
+        void	wait​(long timeoutMillis)	
+        void	wait​(long timeoutMillis, int nanos)
+        
+   1) 첫번째 방법 - Thread class를 상속받아 run()메서드를 재정의 한다.   
+   
+      class UserThread extends Thread{
+          ...
+          @Override
+      	  public void run(){
+      	    //쓰레드에서 동작시킬 코드
+      	  }
+      }    
+      
+      UserThread ut = new UserThread();
+      ut.start(); //쓰레드 동작 시작
+      
+   2) 두번째 방법 - Runnable interface를 구현하여 run()를 재정의 한다.
+      
+      class UserRunnable implements Runnable{
+          ...
+          @Override
+      	  public void run(){
+      	    //쓰레드에서 동작시킬 코드
+      	  }
+      }
+          
+      UserRunnable ur = new UserRunnable();
+      Thread th = new Thread(ur);
+      th.start(); //쓰레드 동작 시작
+      
+2. 쓰레드 상태(state)
+   쓰레드가 생성된 이후에 소멸될때까지의 상태변화가 있다.(생명주기-lifecycle)
+   
+   쓰레드는 OS에 의해 스케쥴링(실행제어)이 이루어진다. 즉, 상태변화가 생긴다.
+   이때 사용자가 개입하여 실행제어를 수행할 필요성이 있을때 사용하는 메서드들이 있다.
+   
+   또한, 쓰레드 상태를 나타내는 상수값은  Thread클래스 내부에  열거형 사용하여
+   정의되어 있다.
+   
+   NEW       쓰레드객체가 생성된 직후. 아직 start()메서드가 적용되기 전이다.  	run()메서드의 끝
+   RUNNABLE  start()메서드가 적용되어 실행중인 상태 (대기큐 <----> 실행중--------stop()-------->종료Terminated)
+				                                             ^
+				             일시정지상태일때(일시정지 큐)			 | 시간경과
+				   BLOCKED   입출력 기능            			 |  interrupt()/interrupted()
+				   TIMED_WAITING sleep() <-------------------|  isInterrupted()        
+				   WAITING   wait(), join(), yield, suspend() ---Deprecated. 
+				               ^      ^        ^       ^
+				               |      |-원인해소-|       |
+				               v                       v
+				             notify()                resume() ---Deprecated. 
+				             notifyAll()  
+   
+  TERMINATED 쓰레드가 종료된 상태 즉, run()메서드가 끝난상태
+             stop()---Deprecated.
+
+   
+   
+참고) 특수한 형태의 클래스로 Enum이 있다.
+    Enum은 상수멤버변수만 가지고 있는 클래스 이다.
+    
+    class Some{
+      멤버변수          x
+      생성자(){}       x
+      다양한 메서드(){}  x
+      public static final int MAX = 100;
+      public static final int MIN = 1;
+    } ===> Enum(열거형)  
+
+
+	755page~766page는 생략 : 관심있는 사람만..
+	
+	
+3. 쓰레드 동기화(교재 767page)
+   임계영역(critical section) : 쓰레드 내부의 코드중 공유데이타를 접근하는 코드
+   
+   잠금(lock) : 특정쓰레드가 임계영역을 실행하게되면 해당 쓰레드가 락 혹은 모니터를 가졌다고 한다.
+               이의미는 다른쓰레드로 제어권이 넘어가도 다른쓰레드에서 공유데이타를 접근하려면 락 즉, 모니터를
+               소유하지 못하므로 공유데이타를 접근하는 코드를 수행할 수 없게된다.
+               
+   쓰레드 동기화 : 각 작업 쓰레드가 동작할때는 해당 쓰레드만 사용하는 
+               별도의 스택이 만들어 지고 run()메서드 내부에 선언한 변수들이 
+               확보되어 개별메모리공간에서 실행되어진다.
+               그런데 상황에 따라서 여러개의 쓰레드가 동시에 특정 메모리 공간을
+               공유하여 사용할 때 가 있다.
+               이때 특정 쓰레드가 공유메모리를 대상으로한 실행코드를 마무리짓지 못했는데
+               중간에 쓰레드가 교체되는 경우가 발생한다.  그러면 교체된 다른 쓰레드에서
+               공유메모리를 접근하여 값을 변경시켠 원래의 쓰레드로 돌아왔을때
+               공유메모리값이 달라졌으면 동일코드를 실행시킨다고 해도 원치 않는 결과값이
+               만들어진다.  이러한 경우를 미연에 방지하려고
+               특정 쓰레드가 공유메모리를 접근하는 코드를 실행중이면 중간에 쓰레드가 
+               교체되어도 다른 쓰레드 공유메모리를 접근하려고 하면 강제로 접근하지 못하도록 만드는 기법을
+               쓰레드 동기화 라고 한다.
+                   
+  Java의 동기화 기법
+  1) synchronized 를 이용 -- 시스템적인 작동구조
+  
+     (1) synchronized block
+     void run(){
+        실행코드1;
+        synchronized(공유객체) {
+           실행코드2;  <--- 공유메모리를 접근하는 코드
+        }
+        실행코드3;
+        실행코드4;
+     }
+     
+     (1) synchronized method
+     void run(){
+        실행코드1;
+        critical();
+        실행코드3;
+        실행코드4;
+     }
+     
+     synchronized void critical(){
+         실행코드2;  <--- 공유메모리를 접근하는 코드
+     }
+  
+ 2) wait(),notify(), notifyAll() -- 사용자가 로직으로 개입하여 좀더 유연한 코드를 작성하는 방법
+             
+ 3) Lock, Condition 사용 <--  Java 8.0이상에서 추가된 기법
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+
+    //자바는 다중 상속 안되므로 하나 상속, 하나 implements
+    //class MyFrame extends Frame implements  ...등은 가능....             
