@@ -1,0 +1,210 @@
+Java언어에서의 입출력
+
+1. 입출력의 종류
+
+  1)기본 입출력(표준입출력-Console)
+  	  표준입력 : System.in     InputStream    키보드
+  	  표준출력 : System.out    PrintStream    모니터
+  	  
+  	  Scanner scanner = new Scanner(System.in);
+  	  
+  	  	
+	  입력(input)     Memory          출력(Output)
+	                 |- 변수 ------>  Monitor   
+	  keyboard ----->|- 객체   
+	                 |- 배열
+	                 
+  2) 메모리  --입력----> 메모리(변수,배열,객체)               
+           <-출력-----
+           
+  3) 메모리(변수,배열,객체) ---출력------>보조기억장치
+                       <--입력------   file
+                      
+  4) 현재컴퓨터 ---------통신port-------------다른 컴퓨터
+     메모리(변수,배열,객체) ---출력------------->                            
+                       <--입력-------------- 
+
+2. Java언어에서의 입출력 기능 --- java.io 패키지에 다양한 클래스 
+
+   스트림(stream) : 일반단어의 뜻은 흐르는 강물이다. 이것의 특성을 가져와서
+   				   (위에서 아래서-단방향성=먼저 보낸 데이터부터 처리, 끊임없이 연결되어 있다=연속적으로 데이터 처리, 연결해서 사용가능)
+   				   컴퓨터 전반에서 사용하는 스트림은 데이타를 운반하는데 사용되는 연결통로의 뜻으로 사용한다.
+                     				          --------------------------------
+                   하나의 스트림으로 입력과 출력을 동시에 처리할 수 없다.
+                                
+       1) 연속된 데이타 ==> byte[],char[]
+       2) 단방향성(입력기능만 수행, 출력기능만 수행) 
+       3) 새로운 연결(스트림과 스트림을 연결)          
+       
+   예) 키보드로 입력받을때 
+                       키보드 버퍼(byte[])     Scanner s = new Scanner(System.in);
+      키보드 abc엔터  ----------------                                 ---------
+                   |a|b|c|\n|\r| | |         <-----------------------------|
+                   ----------------       
+                                           String str = s.nextLine();
+   
+   
+3. java.io 패키지에서 제공되는 클래스들의 종류
+   byte기반 스트림 : 1byte혹은 byte[]에 입력/출력      
+   character기반 스트림 : 1문자 혹은 char[]에 입력/출력 -- 한글처리 가능
+   
+   1) byte기반 스트림
+      입출력의 대상이 byte단위로 이루진다(1 byte, byte[])
+   
+         입력 - abstract InputStream(읽기)         
+         ===============================      
+         abstract int read()	
+         int	read​(byte[] b)	
+         int	read​(byte[] b, int off, int len) 
+                ....
+      
+         출력 - abstract OutputStream(쓰기)
+         ================================
+         void	write​(byte[] b)	
+         void	write​(byte[] b, int off, int len)	
+         abstract void	write​(int b)
+         void	flush()
+             ...
+       
+    실제 사용하는 클래스-------------------------------------
+    기반스트림    
+       1) ByteArrayInputStream, ByteArrayOutputStream		(메모리(byte배열))
+     v 2) FileInputStream,      FileOutputStream			(파일)
+     
+    보조스트림 - FilterInputStream, FilterOutputStream
+       객체생성시 생성자로 반드시 다른 Stream을 인자로 사용해야 한다.
+     v 3) BufferedInputStream,  BufferedOutputStream
+     v 4) DataInputStream,      DataOutputStream
+     v 5) ObjectInputStream,    ObjectOutputStream
+     
+       java.lang.Object
+         java.io.InputStream
+            java.io.FileInputStream
+            
+            
+       java.lang.Object
+         java.io.InputStream
+            java.io.FilterInputStream  ----- 다른 스트림과 연결시켜서 사용할수 있게 있다.
+               java.io.DataInputStream     
+     
+                
+   2) character기반 스트림
+      입출력의 대상이 character단위로 이루어진다( 2byte --> char, char[])    
+          
+         입력 - abstract Reader               
+         ==============
+         int	read()	
+         int	read​(char[] cbuf)	
+         abstract int	read​(char[] cbuf, int off, int len)
+             ...
+                
+
+         출력 - abstract Writer
+         ==============    
+         void	write​(char[] cbuf)	
+		 abstract void	write​(char[] cbuf, int off, int len)	
+		 void	write​(int c)	
+		 void	write​(String str)	
+		 void	write​(String str, int off, int len) 
+		 abstract void	close()	
+		 abstract void	flush()  
+		     ...
+		     
+	실제 사용하는 클래스-------------------------------------
+	기반스트림    
+       1) CharArrayReader,      CharArrayWriter
+       2) StringReader,         StringWriter 
+     v 3) FileReader,           FileWriter
+    보조스트림 
+       객체생성시 생성자로 반드시 다른 Character Stream을 인자로 사용해야 한다.
+     v 3) BufferedReader,       BufferedWriter
+     v 4) InputStreamReader,    OutputStreamWriter      
+
+     v File class ==> file이나 directory의 정보를 관리하는 클래스   
+     v RandomAccessFile ==> 임의접근화일(유일하게 입력스트림과 출력스트림을 동시에 가진다)  
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 사용법을 익혀보자 ( 교재 예제 )
+  
+  Byte계열 기반 스트림 사용법
+   
+  1) ByteArrayInputStream, ByteArrayOutputStream
+      1byte혹은 지정된배열을 이용한 byte단위로 입출력을 수행하는 스트림
+ 
+  2) FileInputStream, FileOutputStream
+      file로 부터 읽거나 file에 출력시킬때 사용하는 스트림
+      
+2) Byte계열의 보조 스트림 -- FilterInputStream, FilterOutputStream을 상속받아 만들어 졌다.
+   생성시 반드시 Byte계열이 스트림을 인자로 사용해야 한다.
+   
+   1) BufferedInputStream, BufferedOutputStream
+      사용법에서는 변화가 없지만 내부적으로 데이타를 읽거나 출력할때
+      내부에 버퍼를 사용하여 처리속도를 개선시킨 스트림
+      
+   2) DataInputStream, DataOutputStream
+                           DataOutputStream 
+      기본자료형(int,float,...) --(1)--> byte[]
+                            <--(2)--  
+                           DataInputStream
+                           
+      DataInputStream      DataOutputStream
+      ---------------      ----------------                 
+      readXXX()            writeXXX()
+          ---기본자료형            ----기본형
+       
+      예제) DataOutputStreamEx1.java 실행후 DataInputStreamEx1.java
+           DataOutputStreamEx2.java 단독실행
+           DataOutputStreamEx3.java 실행후 DataInputStreamEx2.java ==> 일반 try catch구문   ------|
+                                         DataInputStreamEx3.java ==> try resource catch구문 ---|동일기능수행        
+   3) ObjectInputStream, ObectOutputStream ==> 객체 직렬화    
+
+3) character기반의 스트림들
+       Reader          Writer
+   1) 문자기반 스트림
+       FileReader,   FileWriter
+       StringReader, StringWriter
+             
+   2) 문자 보조 스트림
+      다는 character스트림을 생성자의 인자로 사용하는 보조 스트름
+      
+      InputStreamReader, OutputStreamWriter <-- byte단위입출력이 char단위 입출력이 가능하도록 연결
+      BufferedReader, BufferedWriter
+       
+
+참고) Java언어의 표준 입출력
+     System.in ==> 표준입력(키보드)             InputStream
+     System.out ==> 표준출력(모니터) --- 검정색   PrintStream
+     System.err ==> 표준에러(모니터) --- 빨강색   PrintStream
+
+    System클래스의 다음메서드를 사용하여 표준입출력의 대상을 바꿀수 있다.
+    static void	setErr(PrintStream err)	
+	static void	setIn(InputStream in)	
+	static void	setOut(PrintStream out)
+	
+	참고)  System.out.println(다양한값);
+             ===.print();
+              | .printf();
+              |  
+              |-->PrintStream   기본자료형을 문자형태로 변환시켜 출력시키는 기능
+  
+   
+참고 ) 화일의 종류
+      1. Text file
+         메모리의 내용값을 문자로 변환시켜 저장한 형태
+              
+         int a = 50;           a |||||  화일로저장   50      2byte
+         int b = 426378;       b ||||| -------->  426378  6byte
+                                                data.txt
+                                                  
+                                                 화일의 내용을 사용자보고 그 의미를 알수있다.
+                                                 Text Editer에 그내용을 확인할수도 있고 신규 작성할수도 있다.
+      2. Binary file 
+         메모리의 내용값을 그대로 byte배열로만 화일에 저장한다.
+         
+         int a = 50;           a |||||  화일로저장   |||||   4byte
+         int b = 426378;       b ||||| -------->  |||||   4byte
+                                                 data.dat
+                                                     .bmp <=== 전용 프로그램으로만 내용 확인 가능
+                                                     .hwp   
+                                                   ...    
+                                                
+                                                 화일의 내용을 사용자가 보고 그 의미를 알수없다.       
