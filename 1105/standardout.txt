@@ -1,0 +1,6 @@
+Hello by System.out
+표준출력을 모니터에서 stardardout.txt파일로 최종 변경했습니다.
+75
+3.14
+A
+end

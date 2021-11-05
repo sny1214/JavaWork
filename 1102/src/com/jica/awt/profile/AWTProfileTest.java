@@ -200,7 +200,7 @@ class ProfileFrame extends Frame{
 		//삭제/취소버튼의 이벤트 핸들러 설정
 		btnRemove.addActionListener(new RemoveButtonHandler());
 		
-		//내용수정버튼 클릭시의 이벤트 핸들러 설정
+/*		//내용수정버튼 클릭시의 이벤트 핸들러 설정
 		btnModify.addActionListener(new ActionListener() {
 
 			@Override
@@ -243,7 +243,7 @@ class ProfileFrame extends Frame{
                 btnRemove.setLabel("삭      제");//취   소 -->삭    제
 			}
 		});
-		
+*/		
 		//검색버튼 클릭시의 이벤트 핸들러 설정
 		btnSearch.addActionListener(new ActionListener() {
 
@@ -333,6 +333,10 @@ class ProfileFrame extends Frame{
 	}
 	
 	void makeSampleData() {
+		/*
+		 * 여기에 profile.dat 내용을 읽어서 manage에 Profile객체를 추가하는 코드로 
+		 * 변경시키고 아래의 코드를 지운다.
+		 */
 		Profile profile1 = new Profile("홍길동",1,1994,"010-1111-1111","hgd@daum.net",null);
 		manager.add(profile1);
 		

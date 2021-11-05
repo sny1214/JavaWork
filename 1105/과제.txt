@@ -1,0 +1,7 @@
+신상명세관리에서 연습용 데이타를 
+1번 Data만 생성하는 프로그램을 작성한다.
+
+2번째에는 1102프로젝트 AWTProfileTest에서 makeSampleData()메서드의 내부코드를
+profile.dat에서 읽어서 객체를 만들어서 manage에 추가시킨다.
+
+3. ObjectInputStream, ObjectOutputStream 이용해 txt파일로 저장
